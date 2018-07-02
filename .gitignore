@@ -59,3 +59,9 @@ typings/
 
 # next.js build output
 .next
+
+#database config file
+server/database/sequelize.config.js
+
+#compiled files
+public/dist/

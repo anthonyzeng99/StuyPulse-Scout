@@ -1,37 +1,47 @@
 import React from 'react';
-import {Grid, Row, Col, FormGroup, InputGroup, FormControl, DropdownButton, MenuItem, ButtonToolbar, Button} from 'react-bootstrap';
+import {Grid, Row, Col, FormGroup, InputGroup, FormControl, DropdownButton, MenuItem, ButtonToolbar, Button, ToggleButton, ToggleButtonGroup} from 'react-bootstrap';
+import axios from 'axios';
 
 import Header from './Header';
 
-export default class ExpenseForm extends React.Component {
-  constructor(props) {
-  super(props);
-
-  this.state = {
-    teamNumber : props.match ? props.match.teamNumber : null,
-    matchType: 'Practice',
-    matchNumber: '',
-    mobility: false,
-    climb: 'No'
-  }
+const defaultState = {
+  teamNumber : '',
+  matchType: 'Practice',
+  matchNumber: '',
+  scoutName: '',
+  mobility: false,
+  autoAttempt: '',
+  autoSwitch: '',
+  autoScale: '',
+  allianceSwitch: '',
+  scaleScored: '',
+  scaleDropped: '',
+  opposingScale: '',
+  exchangeScored: '',
+  climb: 'No',
+  climbAssists: '',
+  comments: '',
+  card: 'No Card'
 }
 
-handleTeamNumberChange = (e) => {
+export default class ExpenseForm extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = defaultState;
+}
+
+handleValueChange = (e) => {
   e.persist();
-  this.setState(() => ({teamNumber: e.target.value}));
-  console.log(e.target.value)
-};
+  this.setState(() => ({[e.target.id]: e.target.value}));
+}
 
 handleMatchTypeChange = (e) => {
   this.setState(() => ({matchType: e}));
 }
 
 handleMobilityChange = () => {
-  if (this.state.mobility) {
-    this.setState(() => ({mobility: false}))
-  } else {
-    this.setState(() => ({mobility: true}))
-  }
+  this.setState(() => ({mobility: !this.state.mobility}))
 };
 
 handleClimbChange = () => {
@@ -45,149 +55,274 @@ handleClimbChange = () => {
 };
 
 renderClimbButtonColor = () => {
-  if (this.state.climb === 'No') {
-    return 'danger';
-  } else if (this.state.climb === 'Yes') {
-    return 'success';
-  } else if (this.state.climb === 'Assisted') {
-    return 'warning';
+  switch (this.state.climb) {
+    case 'No':
+      return 'danger';
+    case 'Yes':
+      return 'success';
+    case 'Assisted':
+      return 'warning';
   }
 };
 
-handleMatchTypechange = () => {
-  this.setState();
+handleCardChange = () => {
+  if (this.state.card === 'No Card') {
+    this.setState(() => ({card: 'Yellow Card'}));
+  } else if (this.state.card === 'Yellow Card') {
+    this.setState(() => ({card: 'Red Card'}));
+  } else if (this.state.card === 'Red Card') {
+    this.setState(() => ({card: 'No Card'}));
+  }
 };
 
-  render() {
-    return (
-      <div>
-        <Header />
-        <div className="content-container">
-          <h1>Add Match</h1>
-          <Grid>
-           <FormGroup>
-            <Row className="show-grid">
-              <Col xs={3} md={2}>
-                <InputGroup>
-                  <h4>Team #</h4>
-                  <FormControl type="number" value={this.state.teamNumber ? this.state.teamNumber : ''} onChange={this.handleTeamNumberChange}/>
-                </InputGroup>
-              </Col>
-              <Col xs={6} md={4}>
-                <h4>Match #</h4>
-                <InputGroup>
-                  <DropdownButton
-                    componentClass={InputGroup.Button}
-                    id="input-dropdown-addon"
-                    title={this.state.matchType}
-                    onSelect={this.handleMatchTypeChange}
-                    >
-                    <MenuItem value="Practice" eventKey="Practice">Practice</MenuItem>
-                    <MenuItem value="Qualification" eventKey="Qualification">Qualification</MenuItem>
-                    <MenuItem value="Quarter-finals" eventKey="Quarter-finals">Quarter-finals</MenuItem>
-                    <MenuItem value="Semi-finals" eventKey="Semi-finals">Semi-finals</MenuItem>
-                    <MenuItem value="Finals" eventKey="Finals">Finals</MenuItem>
-                  </DropdownButton>
-                  <FormControl type="text" />
-                </InputGroup>
-              </Col>
-              <Col xs={6} md={4}>
-                <InputGroup>
-                  <h4>Scout</h4>
-                  <FormControl type="text" />
-                </InputGroup>
-              </Col>
-            </Row>
-            <Row>
-              <h3>Autonomous</h3>
-              <Col xs={2} md={1}>
-                <ButtonToolbar>
-                  <h4>Mobility</h4>
-                  <Button
-                    bsStyle= {this.state.mobility ? 'success' : 'danger'}
-                    onClick={this.handleMobilityChange}
+renderCardButtonColor = () => {
+  switch (this.state.card) {
+    case 'No Card':
+      return 'success';
+    case 'Yellow Card':
+      return 'warning';
+    case 'Red Card':
+      return 'danger';
+  }
+};
+
+validateCubeValues = () => {
+
+}
+
+handleClearForm = () => {
+  this.setState(() => ({...defaultState}));
+}
+
+handleSubmitForm = () => {
+  axios.post('/addMatch', this.state)
+    .then((res) => {
+      console.log(res);
+    })
+    .then((err) => {
+      console.log(err);
+    })
+  // this.handleClearForm();
+}
+
+render() {
+  return (
+    <div>
+      <Header />
+      <div className="content-container">
+        <h1>Add Match</h1>
+        <Grid>
+         <FormGroup>
+          <Row className="show-grid">
+            <Col xs={3} md={2}>
+              <InputGroup>
+                <h4>Team #</h4>
+                <FormControl
+                  type="number"
+                  id="teamNumber"
+                  value={this.state.teamNumber ? this.state.teamNumber : ''}
+                  onChange={this.handleValueChange}
+                />
+              </InputGroup>
+            </Col>
+            <Col xs={6} md={4}>
+              <h4>Match #</h4>
+              <InputGroup>
+                <DropdownButton
+                  componentClass={InputGroup.Button}
+                  id="input-dropdown-addon"
+                  title={this.state.matchType}
+                  onSelect={this.handleMatchTypeChange}
                   >
-                  {this.state.mobility ? 'Yes' : 'No'}
-                  </Button>
-                </ButtonToolbar>
-              </Col>
-              <Col xs={2} md={1}>
-                <ButtonToolbar>
-                  <h4>Attempt</h4>
-                  <Button bsStyle="danger">N</Button>
-                </ButtonToolbar>
-              </Col>
-            </Row>
-            <Row>
-              <h3>Teleoperated</h3>
-              <Col xs={2} md={1}>
-                <h4>Alliance Switch</h4>
-                <FormGroup>
-                  <FormControl type="number"/>
-                </FormGroup>
-              </Col>
-              <Col xs={2} md={1}>
-                <h4>Scale Scored</h4>
-                <FormGroup>
-                  <FormControl type="number"/>
-                </FormGroup>
-              </Col>
-              <Col xs={2} md={1}>
-                <h4>Scale Dropped</h4>
-                <FormGroup>
-                  <FormControl type="number"/>
-                </FormGroup>
-              </Col>
-              <Col xs={2} md={1}>
-                <h4>Opposing Scale</h4>
-                <FormGroup>
-                  <FormControl type="number"/>
-                </FormGroup>
-              </Col>
-              <Col xs={2} md={1}>
-                <h4>Exchange Scored</h4>
-                <FormGroup>
-                  <FormControl type="number"/>
-                </FormGroup>
-              </Col>
-              <Col xs={2} md={1}>
-                <h4>Climbed Tower</h4>
-                <ButtonToolbar>
-                  <Button
-                    bsStyle= {this.renderClimbButtonColor()}
-                    onClick={this.handleClimbChange}
-                  >
-                  {this.state.climb}
-                  </Button>
-                </ButtonToolbar>
-              </Col>
-              <Col xs={2} md={1}>
-                <h4>Climb Assists</h4>
-                <FormGroup>
-                  <FormControl type="number"/>
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <h3>Comments</h3>
-              <Col xs={8} md={6 }>
-                <FormGroup controlId="formControlsTextarea">
-                  <FormControl componentClass="textarea" placeholder="Comments" />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-               <Col xs={8} xsOffset={8}>
-                <ButtonToolbar>
-                  <Button bsStyle="danger">Clear form</Button>
-                  <Button bsStyle="success">Submit</Button>
-                </ButtonToolbar>
-               </Col>
-            </Row>
-           </FormGroup>
-          </Grid>
-        </div>
+                  <MenuItem value="Practice" eventKey="Practice">Practice</MenuItem>
+                  <MenuItem value="Qualification" eventKey="Qualification">Qualification</MenuItem>
+                  <MenuItem value="Quarter-finals" eventKey="Quarter-finals">Quarter-finals</MenuItem>
+                  <MenuItem value="Semi-finals" eventKey="Semi-finals">Semi-finals</MenuItem>
+                  <MenuItem value="Finals" eventKey="Finals">Finals</MenuItem>
+                </DropdownButton>
+                <FormControl
+                  type="text"
+                  id="matchNumber"
+                  value={this.state.matchNumber}
+                  onChange={this.handleValueChange}
+                />
+              </InputGroup>
+            </Col>
+            <Col xs={6} md={4}>
+              <InputGroup>
+                <h4>Scout</h4>
+                <FormControl
+                  type = "text"
+                  id = "scoutName"
+                  value={this.state.scoutName}
+                  onChange={this.handleValueChange}
+                />
+              </InputGroup>
+            </Col>
+          </Row>
+          <Row>
+            <h3>Autonomous</h3>
+            <Col xs={2} md={1}>
+              <ButtonToolbar>
+                <h4>Mobility</h4>
+                <Button
+                  bsStyle= {this.state.mobility ? 'success' : 'danger'}
+                  onClick={this.handleMobilityChange}
+                >
+                {this.state.mobility ? 'Yes' : 'No'}
+                </Button>
+              </ButtonToolbar>
+            </Col>
+            <Col xs={2} md={2}>
+              <h4>Attempt</h4>
+              <FormGroup>
+                <FormControl
+                  type="text"
+                  id="autoAttempt"
+                  value={this.state.autoAttempt}
+                  onChange={this.handleValueChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col xs={2} md={2}>
+              <h4>Switch</h4>
+              <FormGroup>
+                <FormControl
+                  type="text"
+                  id="autoSwitch"
+                  value={this.state.autoSwitch}
+                  onChange={this.handleValueChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col xs={2} md={2}>
+              <h4>Scale</h4>
+              <FormGroup>
+                <FormControl
+                  type="text"
+                  id="autoScale"
+                  value={this.state.autoScale}
+                  onChange={this.handleValueChange}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
+            <h3>Teleoperated</h3>
+            <Col xs={2} md={1}>
+              <h4>Alliance Switch</h4>
+              <FormGroup>
+                <FormControl
+                  type="number"
+                  id="allianceSwitch"
+                  value={this.state.allianceSwitch}
+                  onChange={this.handleValueChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col xs={2} md={1}>
+              <h4>Scale Scored</h4>
+              <FormGroup>
+                <FormControl
+                  type="number"
+                  id="scaleScored"
+                  value={this.state.scaleScored}
+                  onChange={this.handleValueChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col xs={2} md={1}>
+              <h4>Scale Dropped</h4>
+              <FormGroup>
+                <FormControl
+                  type="number"
+                  id="scaleDropped"
+                  value={this.state.scaleDropped}
+                  onChange={this.handleValueChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col xs={2} md={1}>
+              <h4>Opposing Scale</h4>
+              <FormGroup>
+                <FormControl
+                  type="number"
+                  id="opposingScale"
+                  value={this.state.opposingScale}
+                  onChange={this.handleValueChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col xs={2} md={1}>
+              <h4>Exchange Scored</h4>
+              <FormGroup>
+                <FormControl
+                  type="number"
+                  id="exchangeScored"
+                  value={this.state.exchangeScored}
+                  onChange={this.handleValueChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col xs={2} md={1}>
+              <h4>Climbed Tower</h4>
+              <ButtonToolbar>
+                <Button
+                  bsStyle= {this.renderClimbButtonColor()}
+                  onClick={this.handleClimbChange}
+                >
+                {this.state.climb}
+                </Button>
+              </ButtonToolbar>
+            </Col>
+            <Col xs={2} md={1}>
+              <h4>Climb Assists</h4>
+              <FormGroup>
+                <FormControl
+                  type="number"
+                  id="climbAssists"
+                  value={this.state.climbAssists}
+                  onChange={this.handleValueChange}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
+            <h3>Comments</h3>
+            <Col xs={8} md={6 }>
+              <FormGroup>
+                <FormControl
+                  componentClass="textarea"
+                  placeholder="Comments"
+                  id="comments"
+                  value={this.state.comments}
+                  onChange={this.handleValueChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col xs={8} md={6 }>
+              <ButtonToolbar>
+                <Button
+                  bsStyle= {this.renderCardButtonColor()}
+                  onClick={this.handleCardChange}
+                >
+                {this.state.card}
+                </Button>
+              </ButtonToolbar>
+            </Col>
+          </Row>
+          <Row>
+             <Col xs={8} xsOffset={8}>
+              <ButtonToolbar>
+                <Button bsStyle="default" onClick={this.handleClearForm}>Clear form</Button>
+                <Button bsStyle="default" onClick={this.handleSubmitForm}>Submit</Button>
+              </ButtonToolbar>
+             </Col>
+          </Row>
+         </FormGroup>
+        </Grid>
       </div>
-    );
-  };
+    </div>
+  );
+};
 }
