@@ -16,12 +16,6 @@ export class Home extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.props.startSetMatches().then(() => {
-      this.setState(() => ({matchesNotLoaded: false}));
-    });
-  }
-
   formatMatchNumber = (type, number) => {
     switch (type) {
       case 'Practice':
@@ -55,7 +49,7 @@ export class Home extends React.Component {
         <td>{match.card}</td>
         <td>{match.scoutName}</td>
         <td>{match.comments}</td>
-        <td className="col-md-2">
+        <td className="col-sm-2">
         {
           <ButtonGroup>
             <Button id={match.id} onClick={this.handleEditMatch}>
@@ -81,13 +75,6 @@ export class Home extends React.Component {
   }
 
   render() {
-    if (this.state.matchesNotLoaded) {
-      return (
-        <div>
-          <LoadingPage />
-        </div>
-      )
-    } else {
       return (
         <div>
           <Header />
@@ -113,7 +100,7 @@ export class Home extends React.Component {
                    <th>Card</th>
                    <th>Scout</th>
                    <th >Comments</th>
-                   <th className="col-md-2"></th>
+                   <th className="col-sm-2"></th>
                 </tr>
               </thead>
               <tbody>
@@ -124,7 +111,6 @@ export class Home extends React.Component {
          </div>
       );
     }
-  }
 };
 
 const mapStateToProps = (state, props) => {

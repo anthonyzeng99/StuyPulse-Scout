@@ -29,6 +29,7 @@ app.post('/addMatch', (req, res) => {
     .then(match => {
       console.log(match.toJSON());
     });
+  res.status(200).send(req.body);
 });
 
 app.post('/removeMatch', async (req, res) => {

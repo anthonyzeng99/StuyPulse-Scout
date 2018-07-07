@@ -9,7 +9,6 @@ export const startAddMatch = (match) => {
   return (dispatch, getState) => {
     return axios.post('/addMatch', match)
       .then((res) => {
-        console.log(res);
         dispatch(addMatch(match));
       })
       .catch((err) => {
