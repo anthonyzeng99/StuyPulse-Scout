@@ -3,6 +3,7 @@ import { Router, Link, NavLink, Route, Switch } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 
 import AddMatchPage from '../components/AddMatchPage';
+import  MatchForm from '../components/MatchForm';
 import Home from '../components/Home';
 import NotFoundPage from '../components/NotFoundPage';
 import Teams from '../components/Teams'

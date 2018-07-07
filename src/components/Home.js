@@ -1,21 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Header from './Header.js'
-import { Table, Button } from 'react-bootstrap';
+import { Table, ButtonGroup, Button, Glyphicon } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { startSetMatches } from '../actions/matches'
+import { startSetMatches, startRemoveMatch } from '../actions/matches';
 import LoadingPage from './LoadingPage'
 
 export class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+
+    this.state = {
+      matchesNotLoaded: true
+    }
   }
 
   componentDidMount() {
     this.props.startSetMatches().then(() => {
-      this.setState(() => ({matches: this.props.matches}));
+      this.setState(() => ({matchesNotLoaded: false}));
     });
   }
 
@@ -32,10 +35,6 @@ export class Home extends React.Component {
       case 'Finals':
         return 'F' + number;
     }
-  }
-
-  matchFormat = (match) => {
-    return match.matchType + match.matchNumber;
   }
 
   renderMatchRow = (match) => {
@@ -56,12 +55,33 @@ export class Home extends React.Component {
         <td>{match.card}</td>
         <td>{match.scoutName}</td>
         <td>{match.comments}</td>
+        <td className="col-md-2">
+        {
+          <ButtonGroup>
+            <Button id={match.id} onClick={this.handleEditMatch}>
+              <Glyphicon glyph="pencil" />
+            </Button>
+            <Button id={match.id} onClick={this.handleDeleteMatch}>
+              <Glyphicon glyph="trash" />
+            </Button>
+          </ButtonGroup>
+        }
+        </td>
       </tr>
     )
   }
 
+  handleDeleteMatch = (e) => {
+    this.props.startRemoveMatch(e.currentTarget.id);
+    console.log(this.props.matches);
+  }
+
+  handleEditMatch = (id) => {
+
+  }
+
   render() {
-    if (this.state.matches === undefined) {
+    if (this.state.matchesNotLoaded) {
       return (
         <div>
           <LoadingPage />
@@ -73,12 +93,12 @@ export class Home extends React.Component {
           <Header />
           <div className="content-container">
             <Button>
-              <Link className="button" to="/addMatch">Add Expense</Link>
+              <Link className="button" to="/addMatch">Add Match</Link>
              </Button>
-            <Table className="match-table" condensed="true">
+            <Table className="match-table" condensed={true}>
               <thead>
                 <tr>
-                   <th>Team Number</th>
+                   <th>Team</th>
                    <th>Match</th>
                    <th>Mobility</th>
                    <th>Auto Attempt</th>
@@ -89,14 +109,15 @@ export class Home extends React.Component {
                    <th>Opposing Scale</th>
                    <th>Exchange</th>
                    <th>Climb</th>
-                   <th>Climb Assits</th>
+                   <th>Climb Assists</th>
                    <th>Card</th>
                    <th>Scout</th>
-                   <th>Comments</th>
+                   <th >Comments</th>
+                   <th className="col-md-2"></th>
                 </tr>
               </thead>
               <tbody>
-                {this.state.matches.map((match) => this.renderMatchRow(match))}
+                {this.props.matches.map((match) => this.renderMatchRow(match))}
               </tbody>
             </Table>
           </div>
@@ -113,7 +134,8 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = (dispatch, props) => ({
-  startSetMatches: () => dispatch(startSetMatches())
+  startSetMatches: () => dispatch(startSetMatches()),
+  startRemoveMatch: (id) => dispatch(startRemoveMatch(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

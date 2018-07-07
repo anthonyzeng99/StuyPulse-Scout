@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 app.get('/getMatches', async (req, res) => {
   const matches = await Match.findAll();
-  res.send(matches);
+  res.status(200).send(matches);
 });
 
 app.get('*', (req, res) => {
@@ -29,6 +29,16 @@ app.post('/addMatch', (req, res) => {
     .then(match => {
       console.log(match.toJSON());
     });
+});
+
+app.post('/removeMatch', async (req, res) => {
+  const match = await Match.findById(req.body.id);
+  if (match != null) {
+    match.destroy();
+    res.status(200).send();
+  } else {
+    res.status(404).send();
+  }
 });
 
 app.listen(port, () => {
