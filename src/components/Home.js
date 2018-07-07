@@ -53,9 +53,9 @@ export class Home extends React.Component {
         {
           <ButtonGroup>
             <Button id={match.id} onClick={this.handleEditMatch}>
-              <Link className="button" to={`/editmatch/${match.id}`}>
+
                 <Glyphicon glyph="pencil" />
-              </Link>
+
             </Button>
             <Button id={match.id} onClick={this.handleDeleteMatch}>
               <Glyphicon glyph="trash" />
@@ -72,8 +72,12 @@ export class Home extends React.Component {
     console.log(this.props.matches);
   }
 
-  handleEditMatch = (id) => {
+  handleEditMatch = (e) => {
+    this.props.history.push(`/editMatch/${e.currentTarget.id}`);
+  }
 
+  handleAddMatch = () => {
+    this.props.history.push('/addMatch');
   }
 
   render() {
@@ -81,8 +85,8 @@ export class Home extends React.Component {
         <div>
           <Header />
           <div className="content-container">
-            <Button>
-              <Link className="button" to="/addMatch">Add Match</Link>
+            <Button onClick={this.handleAddMatch}>
+              Add Match
              </Button>
             <Table className="match-table" condensed={true}>
               <thead>
