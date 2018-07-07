@@ -99,10 +99,10 @@ handleSubmitForm = () => {
     .then((res) => {
       console.log(res);
     })
-    .then((err) => {
+    .catch((err) => {
       console.log(err);
     })
-  // this.handleClearForm();
+  this.props.history.push('/');
 }
 
 render() {

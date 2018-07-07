@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => (
     exchangeScored: Sequelize.INTEGER,
     climb: Sequelize.STRING,
     climbAssists: Sequelize.INTEGER,
-    comments: Sequelize.STRING
+    comments: Sequelize.STRING,
+    card: Sequelize.STRING
   })
 );

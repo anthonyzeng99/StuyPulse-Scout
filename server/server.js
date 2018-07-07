@@ -14,12 +14,16 @@ const app = express();
 app.use(express.static(publicPath));
 app.use(bodyParser.json());
 
+app.get('/getMatches', async (req, res) => {
+  const matches = await Match.findAll();
+  res.send(matches);
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
 app.post('/addMatch', (req, res) => {
-  console.log(req.body);
   sequelize.sync()
     .then(() => Match.create(req.body))
     .then(match => {
