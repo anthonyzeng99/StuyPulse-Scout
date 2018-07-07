@@ -32,6 +32,16 @@ app.post('/addMatch', (req, res) => {
   res.status(200).send(req.body);
 });
 
+app.patch('/editMatch/:id', async (req, res) => {
+  const match = await Match.findById(req.body.id);
+  if (match != null) {
+    match.updateAttributes(req.body);
+    res.status(200).send();
+  } else {
+    res.status(400).send();
+  }
+});
+
 app.post('/removeMatch', async (req, res) => {
   const match = await Match.findById(req.body.id);
   if (match != null) {

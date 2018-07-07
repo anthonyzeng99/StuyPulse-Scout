@@ -53,7 +53,9 @@ export class Home extends React.Component {
         {
           <ButtonGroup>
             <Button id={match.id} onClick={this.handleEditMatch}>
-              <Glyphicon glyph="pencil" />
+              <Link className="button" to={`/editmatch/${match.id}`}>
+                <Glyphicon glyph="pencil" />
+              </Link>
             </Button>
             <Button id={match.id} onClick={this.handleDeleteMatch}>
               <Glyphicon glyph="trash" />

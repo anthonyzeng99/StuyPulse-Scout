@@ -17,10 +17,22 @@ export const startAddMatch = (match) => {
   }
 };
 
-export const editMatch = ({id} = {}) => ({
+export const editMatch = (match) => ({
   type: 'EDIT_MATCH',
-  id
+  match
 })
+
+export const startEditMatch = (match) => {
+  return (dispatch, getState) => {
+    axios.patch(`/editMatch/${match.id}`, match)
+      .then((res) => {
+        dispatch(editMatch(match))
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+};
 
 export const removeMatch = (id) => ({
   type: 'REMOVE_MATCH',
@@ -29,11 +41,13 @@ export const removeMatch = (id) => ({
 
 export const startRemoveMatch = (id) => {
   return (dispatch, getState) => {
-    return axios.post('/removeMatch', {
-      id
-    }).then(() => {
-      dispatch(removeMatch(id));
-    });
+    return axios.post('/removeMatch', {id})
+      .then(() => {
+        dispatch(removeMatch(id));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 };
 

@@ -61,7 +61,7 @@ typings/
 .next
 
 #database config file
-server/database/sequelize.config.js
+sequelize.config.js
 
 #compiled files
 public/dist/

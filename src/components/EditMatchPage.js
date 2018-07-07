@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 
 import Header from './Header';
 import MatchForm from './MatchForm';
-import { startAddMatch } from '../actions/matches';
+import { startEditMatch } from '../actions/matches';
 
-export class AddMatchPage extends React.Component {
+export class EditMatchPage extends React.Component {
   constructor(props) {
     super(props);
   }
 
   onSubmit = (match) => {
-    this.props.startAddMatch(match);
+    this.props.startEditMatch(match);
     this.props.history.push('/');
   };
 
@@ -21,8 +21,11 @@ export class AddMatchPage extends React.Component {
       <div>
         <Header />
         <div className="content-container">
-          <h1>Add Match</h1>
-          <MatchForm onSubmit={this.onSubmit}/>
+          <h1>Edit Match</h1>
+          <MatchForm
+            match={this.props.match}
+            onSubmit={this.onSubmit}
+          />
         </div>
       </div>
     );
@@ -30,13 +33,14 @@ export class AddMatchPage extends React.Component {
 }
 
 const mapStateToProps = (state, props) => {
+  const idToFind = parseInt(props.match.params.id);
   return {
-    matches: state.matches
+    match: state.matches.find((match) => match.id === idToFind)
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => ({
-  startAddMatch: (match) => dispatch(startAddMatch(match))
+  startEditMatch: (match) => dispatch(startEditMatch(match))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddMatchPage);
+export default connect(mapStateToProps, mapDispatchToProps)(EditMatchPage);

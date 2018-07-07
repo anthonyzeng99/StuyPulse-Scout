@@ -28,7 +28,7 @@ export default class MatchForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = defaultState;
+    this.state = props.match ? props.match : defaultState;
   }
 
   handleValueChange = (e) => {
