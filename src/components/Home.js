@@ -53,9 +53,7 @@ export class Home extends React.Component {
         {
           <ButtonGroup>
             <Button id={match.id} onClick={this.handleEditMatch}>
-
                 <Glyphicon glyph="pencil" />
-
             </Button>
             <Button id={match.id} onClick={this.handleDeleteMatch}>
               <Glyphicon glyph="trash" />
@@ -86,7 +84,7 @@ export class Home extends React.Component {
           <Header />
           <div className="content-container">
             <Button onClick={this.handleAddMatch}>
-              Add Match
+              <Glyphicon glyph="plus" /> Add Match
              </Button>
             <Table className="match-table" condensed={true}>
               <thead>

@@ -10,14 +10,8 @@ const Header = () => (
       </Navbar.Brand>
     </Navbar.Header>
     <Nav>
-      <NavItem eventKey={1} href="#">
-        Teams
-      </NavItem>
-      <NavItem eventKey={2} href="#">
-        Competitions
-      </NavItem>
-      <NavItem eventKey={2} href="#">
-        Matches
+      <NavItem eventKey={1} href="/">
+        Home
       </NavItem>
     </Nav>
   </Navbar>

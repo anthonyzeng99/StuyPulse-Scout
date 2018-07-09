@@ -31,9 +31,33 @@ export default class MatchForm extends React.Component {
     this.state = props.match ? props.match : defaultState;
   }
 
-  handleValueChange = (e) => {
+  handleTextValueChange = (e) => {
     e.persist();
     this.setState(() => ({[e.target.id]: e.target.value}));
+  }
+
+  handleValueChange = (e) => {
+    e.persist();
+    const value = e.target.value;
+    if (value >= 0 && value <= 99999) {
+      this.setState(() => ({[e.target.id]: value}));
+    }
+  }
+
+  handleCubeValueChange = (e) => {
+    e.persist();
+    const value = e.target.value;
+    if (value >= 0 && value <= 100) {
+      this.setState(() => ({[e.target.id]: value}));
+    }
+  }
+
+  handleClimbAssistsChange = (e) => {
+    e.persist();
+    const value = e.target.value;
+    if (value >= 0 && value <= 2) {
+      this.setState(() => ({climbAssists: value}));
+    }
   }
 
   handleMatchTypeChange = (e) => {
@@ -108,7 +132,7 @@ export default class MatchForm extends React.Component {
               <InputGroup>
                 <h4>Team #</h4>
                 <FormControl
-                  type="number"
+                  type="text"
                   id="teamNumber"
                   value={this.state.teamNumber ? this.state.teamNumber : ''}
                   onChange={this.handleValueChange}
@@ -145,7 +169,7 @@ export default class MatchForm extends React.Component {
                   type = "text"
                   id = "scoutName"
                   value={this.state.scoutName}
-                  onChange={this.handleValueChange}
+                  onChange={this.handleTextValueChange}
                 />
               </InputGroup>
             </Col>
@@ -170,7 +194,7 @@ export default class MatchForm extends React.Component {
                   type="text"
                   id="autoAttempt"
                   value={this.state.autoAttempt}
-                  onChange={this.handleValueChange}
+                  onChange={this.handleTextValueChange}
                 />
               </FormGroup>
             </Col>
@@ -181,7 +205,7 @@ export default class MatchForm extends React.Component {
                   type="text"
                   id="autoSwitch"
                   value={this.state.autoSwitch}
-                  onChange={this.handleValueChange}
+                  onChange={this.handleTextValueChange}
                 />
               </FormGroup>
             </Col>
@@ -192,7 +216,7 @@ export default class MatchForm extends React.Component {
                   type="text"
                   id="autoScale"
                   value={this.state.autoScale}
-                  onChange={this.handleValueChange}
+                  onChange={this.handleTextValueChange}
                 />
               </FormGroup>
             </Col>
@@ -203,10 +227,10 @@ export default class MatchForm extends React.Component {
               <h4>Alliance Switch</h4>
               <FormGroup>
                 <FormControl
-                  type="number"
+                  type="text"
                   id="allianceSwitch"
                   value={this.state.allianceSwitch}
-                  onChange={this.handleValueChange}
+                  onChange={this.handleCubeValueChange}
                 />
               </FormGroup>
             </Col>
@@ -214,10 +238,10 @@ export default class MatchForm extends React.Component {
               <h4>Scale Scored</h4>
               <FormGroup>
                 <FormControl
-                  type="number"
+                  type="text"
                   id="scaleScored"
                   value={this.state.scaleScored}
-                  onChange={this.handleValueChange}
+                  onChange={this.handleCubeValueChange}
                 />
               </FormGroup>
             </Col>
@@ -225,10 +249,10 @@ export default class MatchForm extends React.Component {
               <h4>Scale Dropped</h4>
               <FormGroup>
                 <FormControl
-                  type="number"
+                  type="text"
                   id="scaleDropped"
                   value={this.state.scaleDropped}
-                  onChange={this.handleValueChange}
+                  onChange={this.handleCubeValueChange}
                 />
               </FormGroup>
             </Col>
@@ -236,10 +260,10 @@ export default class MatchForm extends React.Component {
               <h4>Opposing Scale</h4>
               <FormGroup>
                 <FormControl
-                  type="number"
+                  type="text"
                   id="opposingScale"
                   value={this.state.opposingScale}
-                  onChange={this.handleValueChange}
+                  onChange={this.handleCubeValueChange}
                 />
               </FormGroup>
             </Col>
@@ -247,10 +271,10 @@ export default class MatchForm extends React.Component {
               <h4>Exchange Scored</h4>
               <FormGroup>
                 <FormControl
-                  type="number"
+                  type="text"
                   id="exchangeScored"
                   value={this.state.exchangeScored}
-                  onChange={this.handleValueChange}
+                  onChange={this.handleCubeValueChange}
                 />
               </FormGroup>
             </Col>
@@ -269,10 +293,10 @@ export default class MatchForm extends React.Component {
               <h4>Climb Assists</h4>
               <FormGroup>
                 <FormControl
-                  type="number"
+                  type="text"
                   id="climbAssists"
                   value={this.state.climbAssists}
-                  onChange={this.handleValueChange}
+                  onChange={this.handleClimbAssistsChange}
                 />
               </FormGroup>
             </Col>
@@ -286,7 +310,7 @@ export default class MatchForm extends React.Component {
                   placeholder="Comments"
                   id="comments"
                   value={this.state.comments}
-                  onChange={this.handleValueChange}
+                  onChange={this.handleTextValueChange}
                 />
               </FormGroup>
             </Col>
