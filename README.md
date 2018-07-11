@@ -1,1 +1,1 @@
-# stuypulse-scout
+# StuyPulse Scout
