@@ -1,8 +1,21 @@
 import React from 'react';
-import {Grid, Row, Col, FormGroup, InputGroup, FormControl, DropdownButton, MenuItem, ButtonToolbar, Button, ToggleButton, ToggleButtonGroup} from 'react-bootstrap';
+import {
+    Grid,
+    Row,
+    Col,
+    FormGroup,
+    InputGroup,
+    FormControl,
+    DropdownButton,
+    MenuItem,
+    ButtonToolbar,
+    Button,
+    ToggleButton,
+    ToggleButtonGroup
+  } from 'react-bootstrap';
 
+//Components
 import Header from './Header';
-
 
 const defaultState = {
   teamNumber : '',
@@ -109,10 +122,6 @@ export default class MatchForm extends React.Component {
         return 'danger';
     }
   };
-
-  validateCubeValues = () => {
-
-  }
 
   handleClearForm = () => {
     this.setState(() => ({...defaultState}));
@@ -303,7 +312,7 @@ export default class MatchForm extends React.Component {
           </Row>
           <Row>
             <h3>Comments</h3>
-            <Col xs={8} md={6 }>
+            <Col xs={8} md={6}>
               <FormGroup>
                 <FormControl
                   componentClass="textarea"

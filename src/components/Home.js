@@ -1,77 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Header from './Header.js'
-import { Table, ButtonGroup, Button, Glyphicon } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { Table, ButtonGroup, Button, Glyphicon } from 'react-bootstrap';
+
+//Components
+import Header from './Header.js';
+import LoadingPage from './LoadingPage';
+import MatchTableRow from './MatchTableRow';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
+
+//Actions
 import { startSetMatches, startRemoveMatch } from '../actions/matches';
-import LoadingPage from './LoadingPage'
 
 export class Home extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      matchesNotLoaded: true
+      matchesNotLoaded: true,
+      modalVisible: false,
+      matchToDelete: null
     }
-  }
-
-  formatMatchNumber = (type, number) => {
-    switch (type) {
-      case 'Practice':
-        return 'P' + number;
-      case 'Qualification':
-        return 'Q' + number;
-      case 'Quarter-finals':
-        return 'QF' + number;
-      case 'Semi-finals':
-        return 'SF' + number;
-      case 'Finals':
-        return 'F' + number;
-    }
-  }
-
-  renderMatchRow = (match) => {
-    return (
-      <tr key={match.id}>
-        <td>{match.teamNumber}</td>
-        <td>{this.formatMatchNumber(match.matchType, match.matchNumber)}</td>
-        <td>{match.mobility ? 'Y' : 'N'}</td>
-        <td>{match.autoAttempt}</td>
-        <td>{match.autoSwitch}</td>
-        <td>{match.autoScale}</td>
-        <td>{match.allianceSwitch}</td>
-        <td>{match.scaleDropped}</td>
-        <td>{match.opposingScale}</td>
-        <td>{match.exchangeScored}</td>
-        <td>{match.climb}</td>
-        <td>{match.climbAssists}</td>
-        <td>{match.card}</td>
-        <td>{match.scoutName}</td>
-        <td>{match.comments}</td>
-        <td className="col-sm-2">
-        {
-          <ButtonGroup>
-            <Button id={match.id} onClick={this.handleEditMatch}>
-                <Glyphicon glyph="pencil" />
-            </Button>
-            <Button id={match.id} onClick={this.handleDeleteMatch}>
-              <Glyphicon glyph="trash" />
-            </Button>
-          </ButtonGroup>
-        }
-        </td>
-      </tr>
-    )
-  }
-
-  handleDeleteMatch = (e) => {
-    this.props.startRemoveMatch(e.currentTarget.id);
-    console.log(this.props.matches);
-  }
-
-  handleEditMatch = (e) => {
-    this.props.history.push(`/editMatch/${e.currentTarget.id}`);
   }
 
   handleAddMatch = () => {
@@ -83,6 +32,7 @@ export class Home extends React.Component {
         <div>
           <Header />
           <div className="content-container">
+            {this.state.modalVisible ? this.renderDeleteConfirmationModal() : true}
             <Button onClick={this.handleAddMatch}>
               <Glyphicon glyph="plus" /> Add Match
              </Button>
@@ -103,12 +53,18 @@ export class Home extends React.Component {
                    <th>Climb Assists</th>
                    <th>Card</th>
                    <th>Scout</th>
-                   <th >Comments</th>
+                   <th>Comments</th>
                    <th className="col-sm-2"></th>
                 </tr>
               </thead>
               <tbody>
-                {this.props.matches.map((match) => this.renderMatchRow(match))}
+                {this.props.matches.map((match) =>
+                  <MatchTableRow
+                    key={match.id}
+                    history={this.props.history}
+                    {...match}
+                  />
+                )}
               </tbody>
             </Table>
           </div>

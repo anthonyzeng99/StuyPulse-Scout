@@ -1,9 +1,11 @@
 import React from 'react';
-import axios from 'axios';
 import { connect } from 'react-redux';
 
+//Components
 import Header from './Header';
 import MatchForm from './MatchForm';
+
+//Actions
 import { startEditMatch } from '../actions/matches';
 
 export class EditMatchPage extends React.Component {

@@ -6,4 +6,4 @@ const LoadingPage = () => (
   </div>
 );
 
-export default LoadingPage
+export default LoadingPage;

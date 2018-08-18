@@ -1,11 +1,11 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 
 const DeleteConfirmationModal = (props) => (
   <div className="static-modal">
     <Modal.Dialog>
       <Modal.Header>
-        <Modal.Title>Confirm delete</Modal.Title>
+        <Modal.Title>Delete Confirmation</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>Are you sure you want to delete match {props.match} of Team {props.teamNumber}?</Modal.Body>
@@ -15,7 +15,7 @@ const DeleteConfirmationModal = (props) => (
         <Button bsStyle="danger">Delete</Button>
       </Modal.Footer>
     </Modal.Dialog>
-  </div>;
+  </div>
 );
 
 export default DeleteConfirmationModal;
