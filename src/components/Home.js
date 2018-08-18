@@ -27,12 +27,67 @@ export class Home extends React.Component {
     this.props.history.push('/addMatch');
   }
 
+  handleModalResponse = (response) => {
+    if (response) {
+      this.props.startRemoveMatch(this.state.matchToDelete.id);
+    }
+    this.setState(() => ({
+      modalVisible: false,
+      matchToDelete: null
+    }))
+  }
+
+  handleDeleteMatch = (matchInfo) => {
+    this.setState(() => ({
+      matchToDelete: matchInfo,
+      modalVisible:true
+     }))
+  }
+
+  renderDeleteConfirmationModal = () => {
+      return (
+        <DeleteConfirmationModal
+          match={this.state.matchToDelete.match}
+          teamNumber={this.state.matchToDelete.teamNumber}
+          handleModalResponse={this.handleModalResponse}
+        />
+      )
+  }
+  //
+  // handleCancelDelete = () => {
+  //   this.setState(() => ({
+  //     modalVisible: false,
+  //     matchToDelete: null
+  //   }))
+  //
+
+
+  // handleConfirmDeleteMatch = (e) => {
+  //   e.persist();
+  //   this.setState(() => ({
+  //     modalVisible: false,
+  //     matchToDelete: {e.currentTarget}
+  //   }));
+  //   console.log(this.state.matchToDelete);
+  // }
+  //
+  // renderDeleteConfirmationModal = () => {
+  //   return (
+  //     <DeleteConfirmationModal
+  //       match={this.state.matchToDelete.match}
+  //       teamNumber={this.state.matchToDelete.team_number}
+  //       handleDeleteMatch={this.handleDeleteMatch(this.state.matchToDelete.id)}
+  //       handleCancelDelete={this.handleCancelDelete()}
+  //     />
+  //   )
+  // }
+
   render() {
       return (
         <div>
           <Header />
           <div className="content-container">
-            {this.state.modalVisible ? this.renderDeleteConfirmationModal() : true}
+            {this.state.modalVisible ? this.renderDeleteConfirmationModal() : false}
             <Button onClick={this.handleAddMatch}>
               <Glyphicon glyph="plus" /> Add Match
              </Button>
@@ -62,6 +117,7 @@ export class Home extends React.Component {
                   <MatchTableRow
                     key={match.id}
                     history={this.props.history}
+                    handleDeleteMatch={this.handleDeleteMatch}
                     {...match}
                   />
                 )}

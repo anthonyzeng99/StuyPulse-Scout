@@ -25,44 +25,20 @@ export default class MatchTableRow extends React.Component {
     this.props.history.push(`/editMatch/${e.currentTarget.id}`);
   }
 
-  handleDeleteMatch = (id) => {
-    // this.props.startRemoveMatch(id);
-    console.log('hello');
+  handleDeleteMatch = () => {
+    const matchInfo = {
+      id: this.props.id,
+      teamNumber: this.props.teamNumber,
+      match: this.formatMatchNumber(this.props.matchType, this.props.matchNumber)
+    }
+    this.props.handleDeleteMatch(matchInfo);
   }
-  //
-  // handleCancelDelete = () => {
-  //   this.setState(() => ({
-  //     modalVisible: false,
-  //     matchToDelete: null
-  //   }))
-  //
-
-  // renderDeleteConfirmationModal = () => {
-  //   return (
-  //     <DeleteConfirmationModal
-  //       match={this.state.matchToDelete.match}
-  //       teamNumber={this.state.matchToDelete.team_number}
-  //       handleDeleteMatch={this.handleDeleteMatch(this.state.matchToDelete.id)}
-  //       handleCancelDelete={this.handleCancelDelete()}
-  //     />
-  //   )
-  // }
-
-  // handleConfirmDeleteMatch = (e) => {
-  //   e.persist();
-  //   this.setState(() => ({
-  //     modalVisible: false,
-  //     matchToDelete: {e.currentTarget}
-  //   }));
-  //   console.log(this.state.matchToDelete);
-  // }
-  //
 
   render() {
     return (
       <tr key={this.props.id}>
         <td>{this.props.teamNumber}</td>
-        <td>{this.props.matchNumber}</td>
+        <td>{this.formatMatchNumber(this.props.matchType, this.props.matchNumber)}</td>
         <td>{this.props.mobility ? 'Y' : 'N'}</td>
         <td>{this.props.autoAttempt}</td>
         <td>{this.props.autoSwitch}</td>
@@ -86,7 +62,7 @@ export default class MatchTableRow extends React.Component {
                 <Glyphicon glyph="pencil" />
             </Button>
             <Button
-
+              onClick={this.handleDeleteMatch}
             >
               <Glyphicon glyph="trash" />
             </Button>
